@@ -15,7 +15,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['user-authentication-system-k9f9.onrender.com']
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
