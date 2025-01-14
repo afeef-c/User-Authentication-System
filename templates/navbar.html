@@ -1,0 +1,66 @@
+{% load static %}
+
+
+<header class="header bg-light sticky-top">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+                <h2 class="ms-2 mb-0">User Management</h2>
+            </a>
+
+
+            <!-- Navbar Links -->
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ms-auto">
+                    <!-- Home Link -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+
+                    <!-- User Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% if user.is_authenticated %}
+                            <i class="ion-android-person">Hi {{user}}</i>
+                            {% else  %}
+                            <i class="ion-android-person">Pleas Login/Register !!</i>
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            {% if user.is_authenticated %}
+                                <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                                {% if user.is_staff %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'admin_dashboard' %}">
+                                            <i class="fas fa-cogs me-2"></i>Admin Dashboard
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            {% else %}
+                                <li>
+                                    <a class="dropdown-item text-center text-muted">
+                                        Unlock Exclusive Deals &<br> Seamless Order Management!<br>Join Now or Log In!
+                                    </a>
+                                </li>
+                                <li><a class="dropdown-item" href="{% url 'login' %}"><i class="fas fa-bolt me-2"></i>Login/Register</a></li>
+                            {% endif %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Flash Messages -->
+    {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</header>

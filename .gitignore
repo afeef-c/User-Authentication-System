@@ -1,0 +1,43 @@
+# Django specific
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+
+# Database
+db.sqlite3
+*.db
+
+# Media
+/media
+
+# Virtual environment
+venv/
+ENV/
+env/
+*.env
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Static files
+/staticfiles/
+/static/
+
+# Coverage reports
+htmlcov/
+.coverage
+
+# Production
+.env.prod

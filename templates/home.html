@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Welcom Home !</h1>
+
+
+        {% if user.is_authenticated %} 
+            {% if user.is_staff %} 
+                <p class="text-center m-4">Admin can see user logs in admin dashbord </p> 
+            {% else %}
+                <p class="text-center m-4">Welcome, {{ user.first_name }}  {{ user.last_name }}!</p> 
+
+            {% endif %}        
+        {% else %} 
+        <p class="text-center m-4">Welcome, guest! Please <a href="{% url 'login' %}">login</a> or <a href="{% url 'register' %}">signup</a>.</p> 
+        {% endif %}
+</div>
+
+{% endblock %}

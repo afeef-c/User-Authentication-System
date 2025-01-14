@@ -1,0 +1,60 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html class="no-js" lang="zxx">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>User management system</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Favicon -->
+	<link rel="icon" href="data:image/jpeg;base64,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">
+
+	{% comment %} <style>
+		body {
+			max-width: 100%;
+			overflow-y: scroll; /* Enable horizontal scrolling */
+			overflow-x: hidden;
+		}
+        
+        
+	</style> {% endcomment %}
+
+    {% comment %} <link href="{% static 'base.css' %}" rel="stylesheet"> {% endcomment %}
+    {% block css %}
+
+	{% endblock css %}
+    
+	<!-- CSS
+	============================================ -->
+	<!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+	{% include 'navbar.html' %}
+
+
+
+{% block content %}
+
+
+{% endblock %}
+
+
+
+<!-- Bootstrap JS and dependencies --> 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+ 
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script> 
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

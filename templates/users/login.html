@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+<!-- Login Section -->
+<div class="container mt-5 pt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-4">
+                    <h2 class="text-center mb-4 text-primary">Welcome Back!</h2>
+                    <p class="text-center text-muted mb-4">Log in to continue to your account.</p>
+                    <form action="{% url 'login' %}" method="POST" novalidate>
+                        {% csrf_token %}
+                        <!-- Username -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label fw-bold">Username</label>
+                            <input type="text" name="username" id="username" class="form-control form-control-lg rounded-pill" placeholder="Enter your username" required>
+                        </div>
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label fw-bold">Password</label>
+                            <input type="password" name="password" id="password" class="form-control form-control-lg rounded-pill" placeholder="Enter your password" required>
+                        </div>
+                        <!-- Login Button -->
+                        <div class="d-grid">
+                            <button type="submit" name="login" class="btn btn-primary btn-lg rounded-pill">Login</button>
+                        </div>
+                    </form>
+                    <!-- Registration Link -->
+                    <div class="text-center mt-4">
+                        <p class="text-muted">Don't have an account?</p>
+                        <a href="{% url 'register' %}" class="btn btn-outline-primary btn-lg rounded-pill">
+                            <i class="fas fa-user-plus me-2"></i> Register
+                        </a>
+                    </div>
+
+                    <div class="text-center mt-4">
+                    <p class="text-muted">Forgot password?
+                        <a href="{% url 'password_reset' %}" class="outline-primary rounded-pill">
+                            <i class="fas fa-user-plus me-2"></i> Reset Password
+                        </a>
+                    </p>
+                    </div>
+                    <!-- Form Error Messages -->
+                    {% if form.errors %}
+                    <div class="alert alert-danger mt-4">
+                        <strong>Error:</strong> Please correct the following errors:
+                        <ul class="mb-0">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ field|capfirst }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

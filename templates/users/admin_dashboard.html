@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Admin Dashboard</h1>
+        <div class="mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by Username or Email">
+        </div>
+        <div class="table-responsive">
+            <table id="data-table" class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th data-sort="id" class="sortable">ID <span>&#x25B2;</span></th>
+                        <th data-sort="username" class="sortable " >Username <span>&#x25B2;</span></th>
+                        <th data-sort="email" class="sortable">Full Name <span>&#x25B2;</span></th>
+                        <th data-sort="role" class="sortable">Role <span>&#x25B2;</span></th>
+                        <th>Report</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be populated dynamically -->
+                </tbody>
+            </table>
+            <button id="exportButton" class="btn btn-success">Export to CSV</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tableBody = document.querySelector('#data-table tbody');
+            const searchInput = document.getElementById('searchInput');
+            const tableHeaders = document.querySelectorAll('.sortable');
+
+            let usersData = []; // Store fetched data for sorting and searching
+            let currentSortColumn = null;
+            let sortDirection = 'asc';
+
+            // Fetch user data from the API
+            fetch('/users/')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    usersData = data; // Store the data for later use
+                    populateTable(usersData);
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+
+            // Function to populate the table
+            function populateTable(users) {
+                tableBody.innerHTML = ''; // Clear existing table rows
+                users.forEach(user => {
+                    const row = document.createElement('tr');
+
+                    // Create table cells
+                    const idCell = document.createElement('td');
+                    idCell.textContent = user.id;
+
+                    const usernameCell = document.createElement('td');
+                    usernameCell.textContent = user.username;
+
+                    const fullnameCell = document.createElement('td');
+                    fullnameCell.textContent = `${user.first_name} ${user.last_name}`;
+
+                    const roleCell = document.createElement('td');
+                    roleCell.textContent = user.is_staff ? 'Admin' : 'User';
+
+                    const reportCell = document.createElement('td');
+                    const reportButton = document.createElement('button');
+                    reportButton.classList.add('btn', 'btn-primary', 'btn-sm');
+                    reportButton.textContent = 'View Report';
+                    reportButton.onclick = () => {
+                        window.location.href = `/user-report/${user.id}/`;
+                    };
+                    reportCell.appendChild(reportButton);
+
+                    // Append cells to the row
+                    row.appendChild(idCell);
+                    row.appendChild(usernameCell);
+                    row.appendChild(fullnameCell);
+                    row.appendChild(roleCell);
+                    row.appendChild(reportCell);
+
+                    // Append row to the table body
+                    tableBody.appendChild(row);
+                });
+            }
+
+            // Search functionality
+            searchInput.addEventListener('input', () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                const filteredUsers = usersData.filter(user => {
+                    const username = user.username ? user.username.toLowerCase() : '';
+                    const email = user.email ? user.email.toLowerCase() : '';
+                    return username.includes(searchTerm) || email.includes(searchTerm);
+                });
+                populateTable(filteredUsers);
+            });
+
+            // Sorting functionality
+            tableHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const sortColumn = header.getAttribute('data-sort');
+                    if (currentSortColumn === sortColumn) {
+                        // Toggle sort direction if the same column is clicked
+                        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        currentSortColumn = sortColumn;
+                        sortDirection = 'asc'; // Default to ascending on new column
+                    }
+
+                    // Sort usersData based on the selected column and direction
+                    const sortedData = [...usersData].sort((a, b) => {
+                        const valueA = sortColumn === 'role' ? (a.is_staff ? 'Admin' : 'User') : a[sortColumn];
+                        const valueB = sortColumn === 'role' ? (b.is_staff ? 'Admin' : 'User') : b[sortColumn];
+
+                        if (valueA < valueB) return sortDirection === 'asc' ? -1 : 1;
+                        if (valueA > valueB) return sortDirection === 'asc' ? 1 : -1;
+                        return 0;
+                    });
+
+                    populateTable(sortedData);
+
+                    // Update sort icons
+                    tableHeaders.forEach(th => {
+                        const span = th.querySelector('span');
+                        span.textContent = '▲'; // Reset to ascending
+                    });
+                    const span = header.querySelector('span');
+                    span.textContent = sortDirection === 'asc' ? '▲' : '▼'; // Update icon based on sort direction
+                });
+            });
+        });
+
+        
+
+    document.getElementById('exportButton').addEventListener('click', () => {
+        const table = document.getElementById('userTable');
+        const rows = table.querySelectorAll('tr');
+        let csvContent = '';
+        rows.forEach(row => {
+            const cols = row.querySelectorAll('td, th');
+            const rowData = Array.from(cols).map(col => col.innerText).join(',');
+            csvContent += rowData + '\n';
+        });
+
+        // Create a download link
+        const downloadLink = document.createElement('a');
+        downloadLink.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent);
+        downloadLink.download = 'user_data.csv';
+        downloadLink.click();
+    });
+
+    </script>
+</body>
+{% endblock content %}
